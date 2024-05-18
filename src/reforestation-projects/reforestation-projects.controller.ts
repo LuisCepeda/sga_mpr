@@ -1,25 +1,63 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ReforestationProjectsService } from './reforestation-projects.service';
 import { CreateReforestationProjectDto } from './dto/create-reforestation-project.dto';
 import { UpdateReforestationProjectDto } from './dto/update-reforestation-project.dto';
+import { acceptedQueryParams } from 'src/interfaces/reforestation-projects.interfaces';
+import { formatQuery } from 'src/utils/format';
 
-@Controller('reforestation-projects')
+@Controller('api/reforestation-projects')
 export class ReforestationProjectsController {
-  constructor(private readonly reforestationProjectsService: ReforestationProjectsService) {}
+  constructor(private readonly reforestationProjectsService: ReforestationProjectsService) { }
 
   @Post()
-  create(@Body() createReforestationProjectDto: CreateReforestationProjectDto) {
-    return this.reforestationProjectsService.create(createReforestationProjectDto);
+  async create(@Body() createReforestationProjectDto: CreateReforestationProjectDto) {
+    return {
+      'Status': {
+        'message': 'Creación de registro',
+        'code': 201
+      },
+      'Data': await this.reforestationProjectsService.createReport(createReforestationProjectDto)
+    };
   }
 
   @Get()
-  findAll() {
-    return this.reforestationProjectsService.findAll();
+  async findAll(@Query() query: acceptedQueryParams) {
+    const formattedQuery = formatQuery(query)
+    try {
+      const data = await this.reforestationProjectsService.findAll(formattedQuery)
+      if (!data.length) {
+        return {
+          'Status': {
+            'message': 'Lista de registros. Ningún registro devuelto',
+            'code': 404
+          },
+          'Data': [],
+          'Query params': formattedQuery
+        }
+      } else {
+        return {
+          'Status': {
+            'message': 'Lista de registros',
+            'code': 200
+          },
+          'Data': data,
+          'Query params': formattedQuery
+        }
+      }
+    } catch (error) {
+      return {
+        'Status': {
+          'message': 'Error al buscar registros',
+          'code': 500
+        },
+        'Error': error.message
+      }
+    }
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.reforestationProjectsService.findOne(+id);
+    return this.reforestationProjectsService.findOne(id);
   }
 
   @Patch(':id')

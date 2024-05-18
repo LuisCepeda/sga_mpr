@@ -15,6 +15,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/mpr/docs', app, document);
 
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
+
   const PORT = process.env.PORT || 3003
   await app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);

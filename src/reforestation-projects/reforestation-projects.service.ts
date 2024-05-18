@@ -1,19 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateReforestationProjectDto } from './dto/create-reforestation-project.dto';
 import { UpdateReforestationProjectDto } from './dto/update-reforestation-project.dto';
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+import { ReforestationProject } from '../schemas/reforestation-project.schema'
+import { acceptedQueryParams } from 'src/interfaces/reforestation-projects.interfaces';
+
 
 @Injectable()
 export class ReforestationProjectsService {
-  create(createReforestationProjectDto: CreateReforestationProjectDto) {
-    return 'This action adds a new reforestationProject';
+  constructor(@InjectModel(ReforestationProject.name) private reforestationProjectModel: Model<ReforestationProject>) { }
+
+
+  createReport(createReforestationProjectDto: CreateReforestationProjectDto): Promise<ReforestationProject> {
+    const createdRP = new this.reforestationProjectModel(createReforestationProjectDto)
+    return createdRP.save()
   }
 
-  findAll() {
-    return `This action returns all reforestationProjects`;
+  findAll(query: any) {
+    return this.reforestationProjectModel.find(query).exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} reforestationProject`;
+
+  findOne(id: string) {
+    return this.reforestationProjectModel.findOne({ _id: id }).exec()
   }
 
   update(id: number, updateReforestationProjectDto: UpdateReforestationProjectDto) {
