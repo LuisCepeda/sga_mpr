@@ -3,7 +3,7 @@ import { CreateReforestationProjectDto } from './dto/create-reforestation-projec
 import { UpdateReforestationProjectDto } from './dto/update-reforestation-project.dto';
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { ReforestationProject } from '../schemas/reforestation-project.schema'
+import { ReforestationProject } from '../database/schemas/reforestation-project.schema'
 import { acceptedQueryParams } from 'src/interfaces/reforestation-projects.interfaces';
 
 
@@ -12,25 +12,28 @@ export class ReforestationProjectsService {
   constructor(@InjectModel(ReforestationProject.name) private reforestationProjectModel: Model<ReforestationProject>) { }
 
 
-  createReport(createReforestationProjectDto: CreateReforestationProjectDto): Promise<ReforestationProject> {
+  async createReport(createReforestationProjectDto: CreateReforestationProjectDto): Promise<ReforestationProject> {
     const createdRP = new this.reforestationProjectModel(createReforestationProjectDto)
-    return createdRP.save()
+    return await createdRP.save()
   }
 
-  findAll(query: any) {
-    return this.reforestationProjectModel.find(query).exec();
+  async findAll(query: any) {
+    return await this.reforestationProjectModel.find(query).exec();
   }
 
 
-  findOne(id: string) {
-    return this.reforestationProjectModel.findOne({ _id: id }).exec()
+  async findOne(id: string) {
+    return await this.reforestationProjectModel.find({ _id: id }).exec()
   }
 
-  update(id: number, updateReforestationProjectDto: UpdateReforestationProjectDto) {
-    return `This action updates a #${id} reforestationProject`;
+  async update(id: string, updateReforestationProjectDto: UpdateReforestationProjectDto) {
+    const filter = { _id: id }
+    return this.reforestationProjectModel.findOneAndUpdate(filter, updateReforestationProjectDto, { new: true })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} reforestationProject`;
+  async remove(id: string) {
+    const filter = { _id: id }
+    const deletedRP = await this.reforestationProjectModel.deleteOne(filter);
+    return deletedRP
   }
 }

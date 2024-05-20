@@ -4,7 +4,11 @@ import mongodb from '../constants/mongodb'
 
 @Module({
     imports: [
-        MongooseModule.forRoot(process.env.MONGODB_URI, { dbName: mongodb.DATABASE_NAME })
+        MongooseModule.forRootAsync({
+            useFactory: () => ({
+                uri: process.env.MONGODB_URI
+            })
+        })
     ],
     controllers: [],
     providers: []
