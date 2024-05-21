@@ -7,7 +7,7 @@ import { formatQuery } from 'src/utils/format';
 import { Response } from 'express';
 
 
-@Controller('api/reforestation-projects')
+@Controller('reforestation-projects')
 export class ReforestationProjectsController {
   constructor(private readonly reforestationProjectsService: ReforestationProjectsService) { }
 

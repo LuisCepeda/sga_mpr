@@ -6,6 +6,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.setGlobalPrefix('api/v1')
   const config = new DocumentBuilder()
     .setTitle('SGA Monitoreo Planes de Reforestación')
     .setDescription('Esta API se encarga de manejar la información acerca de los Planes de reforestación.')
@@ -13,7 +14,7 @@ async function bootstrap() {
     .addTag('Reforestation')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/mpr/docs', app, document);
+  SwaggerModule.setup('api/v1/mpr/docs', app, document);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
 
