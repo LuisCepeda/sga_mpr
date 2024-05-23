@@ -1,0 +1,15 @@
+export default {
+    CREATED_SINGLE_RECORD: 'Registro creado satisfactoriamente.',
+    DELETED_SINGLE_RECORD: `Registro eliminado correctamente.`,
+    ERROR_CREATING_SINGLE_RECORD: 'Error al crear el registro.',
+    ERROR_DELETING_SINGLE_RECORD: `Error al eliminar el registro.`,
+    ERROR_FINDING_MULTIPLE_RECORDS: 'Error al buscar registros.',
+    ERROR_FINDING_SINGLE_RECORD: 'Error al buscar el registro.',
+    ERROR_UPDATING_SINGLE_RECORD: 'Error al actualizar registro.',
+    FOUND_MULTIPLE_RECORDS: 'Registros encontrados.',
+    FOUND_SINGLE_RECORD: `Registro encontrado.`,
+    NO_RECORD_TO_DELETE: `No se encontró registro registro para eliminar.`,
+    NOT_FOUND_MULTIPLE_RECORDS: 'No se encontraron registros.',
+    NOT_FOUND_SINGLE_RECORD: `Registro no encontrado.`,
+    UPDATED_SINGLE_RECORD: `Registro actualizado.`,
+}

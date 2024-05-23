@@ -1,0 +1,39 @@
+version: '3.5'
+
+services:
+  sgamongodb:
+    container_name: sga_mongodb
+    # image: mongodb
+    image: mongodb-raspberrypi4-unofficial-r7.0.4
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=siffusmelon
+      - MONGO_INITDB_DATABASE=sga
+    ports:
+      - '27017:27017'
+    volumes: -dbdata6:/data/db
+    networks:
+      - sga-network
+  sgaapi:
+    container_name: sga-mpr
+    build: .
+    image: imageName
+    environment:
+      - PORT = 3003
+      - MONGODB_URI='mongodb://admin:siffusmelon@192.168.20.48:27017/'
+    ports:
+      - '3003:3003'
+    depends_on:
+      - sgamongodb
+    volumes:
+      - .:/src
+    networks:
+      - sga-network
+
+volumes:
+  dbdata6:
+
+
+networks:
+  sga-network:
+    driver: bridge

@@ -11,7 +11,6 @@ async function bootstrap() {
     .setTitle('SGA Monitoreo Planes de Reforestación')
     .setDescription('Esta API se encarga de manejar la información acerca de los Planes de reforestación.')
     .setVersion('1.0')
-    .addTag('Reforestation')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/v1/mpr/docs', app, document);

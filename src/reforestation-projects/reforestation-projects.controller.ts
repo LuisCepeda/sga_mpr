@@ -5,32 +5,37 @@ import { UpdateReforestationProjectDto } from './dto/update-reforestation-projec
 import { acceptedQueryParams } from 'src/interfaces/reforestation-projects.interfaces';
 import { formatQuery } from 'src/utils/format';
 import { Response } from 'express';
+import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import messages from '../constants/messages'
 
-
+@ApiTags('Reforestation projects')
 @Controller('reforestation-projects')
 export class ReforestationProjectsController {
   constructor(private readonly reforestationProjectsService: ReforestationProjectsService) { }
 
   @Post()
+  @ApiCreatedResponse({ description: messages.CREATED_SINGLE_RECORD })
   async create(@Body() createReforestationProjectDto: CreateReforestationProjectDto, @Res() response: Response) {
     try {
       const createdProject = await this.reforestationProjectsService.createReport(createReforestationProjectDto)
       return response.status(HttpStatus.CREATED).json({
         'Status': {
-          'message': 'Creación de registro',
+          'message': messages.CREATED_SINGLE_RECORD,
           'code': HttpStatus.CREATED
         },
         'Data': createdProject
       })
     } catch (error) {
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: 'Error al crear el registro',
+        message: messages.ERROR_CREATING_SINGLE_RECORD,
         error: error.message,
       });
     };
   }
 
   @Get()
+  @ApiNotFoundResponse({ description: messages.NOT_FOUND_MULTIPLE_RECORDS })
+  @ApiOkResponse({ description: '' })
   async findAll(@Query() query: acceptedQueryParams, @Res() response: Response) {
     const formattedQuery = formatQuery(query)
     try {
@@ -38,7 +43,7 @@ export class ReforestationProjectsController {
       if (!data.length) {
         return response.status(HttpStatus.NOT_FOUND).json({
           'Status': {
-            'message': 'No se encontraron registros',
+            'message': messages.NOT_FOUND_MULTIPLE_RECORDS,
             'code': HttpStatus.NOT_FOUND
           },
           'Data': [],
@@ -47,7 +52,7 @@ export class ReforestationProjectsController {
       }
       return response.status(HttpStatus.OK).json({
         'Status': {
-          'message': 'Lista de registros',
+          'message': messages.FOUND_MULTIPLE_RECORDS,
           'code': HttpStatus.OK
         },
         'Data': data,
@@ -56,7 +61,7 @@ export class ReforestationProjectsController {
 
     } catch (error) {
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: 'Error al buscar registros',
+        message: messages.ERROR_FINDING_MULTIPLE_RECORDS,
         error: error.message,
       });
     }
@@ -69,23 +74,25 @@ export class ReforestationProjectsController {
       if (!data.length) {
         return response.status(HttpStatus.NOT_FOUND).json({
           'Status': {
-            'message': `Registro con id ${id} no encontrado.`,
-            'code': HttpStatus.NOT_FOUND
+            'message': messages.NOT_FOUND_SINGLE_RECORD,
+            'code': HttpStatus.NOT_FOUND,
+            'id': id
           }
         });
       }
 
       return response.status(HttpStatus.OK).json({
         'Status': {
-          'message': `Registro con id: ${id}`,
+          'message': messages.FOUND_SINGLE_RECORD,
           'code': HttpStatus.OK,
+          'id': id
         },
         'Data': data
       })
 
     } catch (error) {
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: 'Error al buscar registro',
+        message: messages.ERROR_FINDING_SINGLE_RECORD,
         error: error.message,
       });
     }
@@ -97,15 +104,17 @@ export class ReforestationProjectsController {
       const updatedProject = await this.reforestationProjectsService.update(id, updateReforestationProjectDto);
       return response.status(HttpStatus.OK).json({
         'Status': {
-          'message': `Registro con id ${id} actualizado`,
+          'message': messages.UPDATED_SINGLE_RECORD,
           'code': HttpStatus.OK,
+          'id': id
         },
         'Data': updatedProject,
       })
     } catch (error) {
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: 'Error al actualizar registro',
-        error: error.message,
+        'message': messages.ERROR_UPDATING_SINGLE_RECORD,
+        'error': error.message,
+        'id': id
       });
     }
   }
@@ -117,19 +126,21 @@ export class ReforestationProjectsController {
 
 
       if (deletedCount === 0) {
-        throw new NotFoundException(`No se encontró registro con id ${id}`);
+        throw new NotFoundException(messages.NO_RECORD_TO_DELETE);
       }
       return response.status(HttpStatus.NO_CONTENT).json({
         status: {
-          message: `Registro con id ${id} eliminado correctamente.`,
+          message: messages.DELETED_SINGLE_RECORD,
           code: HttpStatus.NO_CONTENT,
+          id: id
         },
       });
 
     } catch (error) {
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: `Error al eliminar el registro ${id}`,
+        message: messages.ERROR_DELETING_SINGLE_RECORD,
         error: error.message,
+        id: id
       });
     }
   }
