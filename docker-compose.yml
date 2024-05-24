@@ -11,13 +11,13 @@ services:
       - MONGO_INITDB_DATABASE=sga
     ports:
       - '27017:27017'
-    volumes: -dbdata6:/data/db
+    #volumes: -dbdata6:/data/db
     networks:
       - sga-network
   sgaapi:
     container_name: sga-mpr
     build: .
-    image: imageName
+    #image: imageName
     environment:
       - PORT = 3003
       - MONGODB_URI='mongodb://admin:siffusmelon@192.168.20.48:27017/'
@@ -25,13 +25,13 @@ services:
       - '3003:3003'
     depends_on:
       - sgamongodb
-    volumes:
-      - .:/src
+    #volumes:
+    #  - .:/src
     networks:
       - sga-network
 
-volumes:
-  dbdata6:
+#volumes:
+#  dbdata6:
 
 
 networks:

@@ -6,6 +6,9 @@ FROM node:18
 
 WORKDIR /usr/src/app
 
+ENV PORT = 3003
+ENV MONGODB_URI='mongodb://admin:siffusmelon@192.168.20.48:27017/'
+
 COPY package*.json ./
 
 RUN npm install
