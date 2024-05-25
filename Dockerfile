@@ -1,5 +1,5 @@
-FROM node:18
-
+#FROM node:18
+FROM node:20.12-alpine
 # RUN apt-get update && apt-get install -y git
 
 # RUN git clone https://github.com/LuisCepeda/sga_mpr /usr/src/app
