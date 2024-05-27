@@ -21,7 +21,7 @@ services:
     build:
       context: .
       args:
-        - no_cache=true
+        - no_cache:true
     env_file:
       - .env.development.local
     environment:

@@ -5,10 +5,15 @@ FROM node:20.3.1
 
 # RUN git clone https://github.com/LuisCepeda/sga_mpr /usr/src/app
 
+
+ARG PORT
+ARG MONGODB_URI
+
 WORKDIR /usr/src/app
 
-ENV PORT=3003
-ENV MONGODB_URI='mongodb://admin:siffusmelon@192.168.20.48:27017/'
+ENV PORT=$PORT
+ENV MONGODB_URI=$MONGODB_URI
+#ENV MONGODB_URI='mongodb://admin:siffusmelon@192.168.20.48:27017/'
 
 RUN echo "PORT set to ${PORT}"
 RUN echo "MONGODB_URI set to ${MONGODB_URI}"
