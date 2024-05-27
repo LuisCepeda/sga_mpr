@@ -5,22 +5,28 @@ services:
     container_name: sga_mongodb
     # image: mongodb
     image: mongodb-raspberrypi4-unofficial-r7.0.4
+
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=siffusmelon
-      - MONGO_INITDB_DATABASE=sga
+      - MONGO_INITDB_ROOT_USERNAME=${COMPOSE_MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${COMPOSE_MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${COMPOSE_MONGO_INITDB_DATABASE}
     ports:
       - '27017:27017'
     #volumes: -dbdata6:/data/db
     networks:
       - sga-network
+    env_file:
+      - .env.development.local
+
   sgaapi:
     container_name: sga-mpr
-    build: .
-    #image: imageName
+    build:
+      context: .
+      args:
+        - no_cache='true'
     environment:
-      - PORT = 3003
-      - MONGODB_URI='mongodb://admin:siffusmelon@192.168.20.48:27017/'
+      - PORT=${PORT}
+      - MONGODB_URI=${COMPOSE_MONGODB_URI}
     ports:
       - '3003:3003'
     depends_on:
@@ -29,6 +35,8 @@ services:
     #  - .:/src
     networks:
       - sga-network
+    env_file:
+      - .env.development.local
 
 #volumes:
 #  dbdata6:
