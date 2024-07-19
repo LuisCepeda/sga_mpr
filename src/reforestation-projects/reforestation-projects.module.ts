@@ -4,10 +4,11 @@ import { ReforestationProjectsController } from './reforestation-projects.contro
 import { MongooseModule } from '@nestjs/mongoose';
 import { ReforestationProjectSchema, ReforestationProject } from '../database/schemas/reforestation-project.schema'
 import { LoggerMiddleware } from './logger/logger.middleware';
+import { InitDbService } from './init-db.service'
 
 @Module({
   controllers: [ReforestationProjectsController],
-  providers: [ReforestationProjectsService],
+  providers: [ReforestationProjectsService, InitDbService],
   imports: [MongooseModule.forFeature([{ name: ReforestationProject.name, schema: ReforestationProjectSchema }])]
 })
 export class ReforestationProjectsModule implements NestModule {

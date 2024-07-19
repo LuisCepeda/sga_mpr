@@ -13,7 +13,6 @@ WORKDIR /usr/src/app
 
 ENV PORT=$PORT
 ENV MONGODB_URI=$MONGODB_URI
-#ENV MONGODB_URI='mongodb://admin:siffusmelon@192.168.20.48:27017/'
 
 RUN echo "PORT set to ${PORT}"
 RUN echo "MONGODB_URI set to ${MONGODB_URI}"
